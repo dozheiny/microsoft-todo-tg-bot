@@ -10,6 +10,5 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version-file: "go.mod"
-          cache: true
       - name: Test
         run: go test -v ./...
