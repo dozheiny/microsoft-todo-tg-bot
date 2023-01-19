@@ -20,6 +20,5 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version-file: "go.mod"
-          cache: true
       - name: Build
         run: env GOARCH=${{ matrix.goarch }} make
