@@ -1,0 +1,105 @@
+// Package web provides functionality for making HTTP requests and binding JSON output.
+package web
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+)
+
+// Base is a struct for using web requests.
+type Base struct {
+	Host   string
+	Params []Params
+	Method string
+	Output interface{}
+}
+
+type Params struct {
+	Key   string
+	Value string
+}
+
+// Init is an initializer to use all functions for sending requests.
+func Init() Base {
+	return Base{Method: http.MethodGet}
+}
+
+// SetHost will set Host on Base.Host and return Base.
+func (b Base) SetHost(host string) Base {
+	b.Host = host
+	return b
+}
+
+// SetParam gets key and value and set into Base.Params,
+// in Do function SetParam use for set query params to send HTTP request.
+func (b Base) SetParam(key, value string) Base {
+	p := Params{
+		Key:   key,
+		Value: value,
+	}
+
+	b.Params = append(b.Params, p)
+
+	return b
+}
+
+// SetMethod gets method and set method for HTTP requests,
+// method will store in Base.Method;
+// HINT: it's good to use http package for set methods;
+// Default is GET method.
+func (b Base) SetMethod(method string) Base {
+	b.Method = method
+	return b
+}
+
+// SetOutput gets interface called output and set it into Base.Output.
+func (b Base) SetOutput(output interface{}) Base {
+	b.Output = output
+	return b
+}
+
+// Do sends HTTP request by all variables sets on Base struct.
+func (b Base) Do() (interface{}, error) {
+
+	query := url.Values{}
+	var client http.Client
+
+	if len(b.Params) != 0 {
+		for number := range b.Params {
+			query.Add(b.Params[number].Key, b.Params[number].Value)
+		}
+	}
+
+	b.Host = fmt.Sprintf("%s?%s", b.Host, query.Encode())
+
+	req, err := http.NewRequest(b.Method, b.Host, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			return
+		}
+	}(resp.Body)
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, b.Output); err != nil {
+		return nil, err
+	}
+
+	return b.Output, nil
+}
