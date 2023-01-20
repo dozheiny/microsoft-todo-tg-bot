@@ -4,9 +4,6 @@ jobs:
   go-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Set Enviroment
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }} 
       - name: Export Enviroments
         run: export TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }} 
       - name: Check out source code
