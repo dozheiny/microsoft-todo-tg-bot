@@ -13,4 +13,6 @@ jobs:
         with:
           go-version-file: "go.mod"
       - name: Test
-        run: go test -v ./...
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        run: export TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }} && go test -v ./...
