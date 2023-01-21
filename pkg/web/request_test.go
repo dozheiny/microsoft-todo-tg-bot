@@ -99,6 +99,21 @@ func TestBase_SetParam(t *testing.T) {
 	}
 }
 
+func TestBase_SetHeader(t *testing.T) {
+	t.Parallel()
+
+	var key, value string
+
+	key = "foo"
+	value = "bar"
+
+	b := web.Init().SetHeader(key, value)
+
+	if b.Headers[0].Key != key || b.Headers[0].Value != value {
+		t.Errorf("Error on set params; excepted: %s %s, actual: %s", key, value, b.Headers[0])
+	}
+}
+
 func TestBase_Do(t *testing.T) {
 	t.Parallel()
 

@@ -11,10 +11,11 @@ import (
 
 // Base is a struct for using web requests.
 type Base struct {
-	Host   string
-	Params []Params
-	Method string
-	Output interface{}
+	Host    string
+	Params  []Params
+	Headers []Params
+	Method  string
+	Output  interface{}
 }
 
 type Params struct {
@@ -42,6 +43,19 @@ func (b Base) SetParam(key, value string) Base {
 	}
 
 	b.Params = append(b.Params, p)
+
+	return b
+}
+
+// SetHeader given key and value as string and set into Base.Headers,
+// in Do function headers will be set for HTTP request.
+func (b Base) SetHeader(key, value string) Base {
+	h := Params{
+		Key:   key,
+		Value: value,
+	}
+
+	b.Headers = append(b.Headers, h)
 
 	return b
 }
@@ -78,6 +92,12 @@ func (b Base) Do() (interface{}, error) {
 	req, err := http.NewRequest(b.Method, b.Host, nil)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(b.Headers) != 0 {
+		for number := range b.Headers {
+			req.Header.Set(b.Headers[number].Key, b.Headers[number].Value)
+		}
 	}
 
 	resp, err := client.Do(req)
