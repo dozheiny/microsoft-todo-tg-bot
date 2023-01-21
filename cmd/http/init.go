@@ -14,6 +14,11 @@ func Init() error {
 		return err
 	}
 
+	host, err := config.Get("HOST")
+	if err != nil {
+		return err
+	}
+
 	getMe, err := telegram.GetMe(tgToken)
 	if err != nil {
 		return err
@@ -21,6 +26,10 @@ func Init() error {
 
 	if !getMe.Ok {
 		return okFromGetMeShouldBeTrue
+	}
+
+	if _, err := telegram.SetWebhook(host, tgToken); err != nil {
+		return err
 	}
 
 	return nil
