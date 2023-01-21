@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/dozheiny/microsoft-todo-tg-bot/config"
+	"github.com/dozheiny/microsoft-todo-tg-bot/controllers/telegram"
 	"log"
 	"net/http"
 )
@@ -18,7 +19,8 @@ func main() {
 		panic(err)
 	}
 
+	http.HandleFunc("/telegram", telegram.Update)
+
 	fmt.Printf("Listening on %s\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
-
 }
