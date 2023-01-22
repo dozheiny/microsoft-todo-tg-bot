@@ -26,12 +26,10 @@ func Get(key string) (string, error) {
 	switch operationSystem {
 	case "windows":
 		if err := godotenv.Load(path + "\\.env"); err != nil {
-			return "", err
 		}
 
 	case "linux":
 		if err := godotenv.Load(path + "/.env"); err != nil {
-			return "", err
 		}
 	}
 
