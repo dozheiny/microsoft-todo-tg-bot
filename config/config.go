@@ -1,7 +1,9 @@
 package config
 
 import (
+	"github.com/joho/godotenv"
 	"os"
+	"runtime"
 	"strings"
 )
 
@@ -12,6 +14,28 @@ func Get(key string) (string, error) {
 
 	value = os.Getenv(key)
 	if strings.Compare(value, "") == 0 {
+		return "", notFound
+	}
+
+	path, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+
+	operationSystem := runtime.GOOS
+	switch operationSystem {
+	case "windows":
+		if err := godotenv.Load(path + "\\.env"); err != nil {
+		}
+
+	case "linux":
+		if err := godotenv.Load(path + "/.env"); err != nil {
+		}
+	}
+
+	value = os.Getenv(key)
+
+	if value == "" {
 		return "", notFound
 	}
 
