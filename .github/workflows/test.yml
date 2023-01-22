@@ -15,4 +15,6 @@ jobs:
       - name: Test
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        run: export TELEGRAM_TOKEN=$TELEGRAM_TOKEN && go test -v ./...
+          HOST: ${{ vars.HOST }}
+          PORT: ${{ vars.PORT }}
+        run: go test -v ./...
