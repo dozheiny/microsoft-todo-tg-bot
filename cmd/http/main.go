@@ -19,8 +19,18 @@ func main() {
 		panic(err)
 	}
 
+	certPath, err := config.Get("CERT_PATH")
+	if err != nil {
+		panic(err)
+	}
+
+	keyPath, err := config.Get("KEY_PATH")
+	if err != nil {
+		panic(err)
+	}
+
 	http.HandleFunc("/telegram", telegram.Update)
 
 	fmt.Printf("Listening on %s\n", port)
-	log.Fatal(http.ListenAndServe(port, nil))
+	log.Fatal(http.ListenAndServeTLS(port, certPath, keyPath, nil))
 }
