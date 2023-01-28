@@ -1,2 +1,4 @@
 # JetBrains Products
 /.idea
+*.pem
+*.key
