@@ -3,9 +3,10 @@ package telegram
 import "errors"
 
 const (
-	baseUrl    = "https://api.telegram.org/"
-	getMe      = "/getMe"
-	setWebhook = "/setWebhook"
+	baseUrl     = "https://api.telegram.org/"
+	getMe       = "/getMe"
+	setWebhook  = "/setWebhook"
+	sendMessage = "/sendMessage"
 )
 
 var (

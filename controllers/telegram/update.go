@@ -3,11 +3,14 @@ package telegram
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/dozheiny/microsoft-todo-tg-bot/config"
 	"github.com/dozheiny/microsoft-todo-tg-bot/models/telegram"
+	telegram2 "github.com/dozheiny/microsoft-todo-tg-bot/pkg/telegram"
 	"github.com/dozheiny/microsoft-todo-tg-bot/pkg/web"
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // Update will receive all requests from https://api.telegram.org
@@ -36,5 +39,16 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	fmt.Println(inputForm)
+	token, err := config.Get("TELEGRAM_TOKEN")
+	if err != nil {
+		panic(err)
+	}
+
+	text := fmt.Sprintf("Hi %s", inputForm.Message.From.FirstName)
+
+	if err := telegram2.SendMessage(strconv.
+		FormatInt(inputForm.Message.Chat.ID, 10), text, token); err != nil {
+		panic(err)
+	}
+
 }
