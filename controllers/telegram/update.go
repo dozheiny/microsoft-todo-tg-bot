@@ -24,24 +24,24 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 		_, err := io.WriteString(w, fmt.Sprintf("Got error on read body: %s", err.Error()))
 		if err != nil {
-			log.Print(err)
+			log.Print(fmt.Sprintf("got error on io.WriteString: %s", err.Error()))
 		}
 	}
 
 	inputForm := new(telegram.Update)
 
 	if err := json.Unmarshal(body, inputForm); err != nil {
-		log.Print(err.Error())
+		log.Print(fmt.Sprintf("got error on parse json un marshal: %s", err.Error()))
 
 		_, err := io.WriteString(w, fmt.Sprintf("Got error on parse body: %s", err.Error()))
 		if err != nil {
-			log.Print(err)
+			log.Print(fmt.Sprintf("got error on io.WriteString: %s", err.Error()))
 		}
 	}
 
 	token, err := config.Get("TELEGRAM_TOKEN")
 	if err != nil {
-		log.Print(err)
+		log.Print(fmt.Sprintf("got error on reading telegram token :%s", err.Error()))
 	}
 
 	text := fmt.Sprintf("Hi %s", inputForm.Message.From.FirstName)
