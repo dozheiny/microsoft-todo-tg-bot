@@ -9,6 +9,8 @@ import (
 func SetWebhook(host, token string) (*telegram.SetWebhook, error) {
 	url := fmt.Sprintf("%sbot%s%s", baseUrl, token, setWebhook)
 
+	host = fmt.Sprintf("%s/telegram", host)
+
 	o, err := web.Init().SetHost(url).SetHeader("X-Telegram-Bot-Api-Secret-Token", token).
 		SetParam("url", host).SetOutput(&telegram.SetWebhook{}).Do()
 	if err != nil {
