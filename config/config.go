@@ -13,8 +13,8 @@ func Get(key string) (string, error) {
 	var value string
 
 	value = os.Getenv(key)
-	if strings.Compare(value, "") == 0 {
-		return "", notFound
+	if strings.Compare(value, "") != 0 {
+		return value, nil
 	}
 
 	path, err := os.Getwd()
@@ -26,10 +26,12 @@ func Get(key string) (string, error) {
 	switch operationSystem {
 	case "windows":
 		if err := godotenv.Load(path + "\\.env"); err != nil {
+			return "", err
 		}
 
 	case "linux":
 		if err := godotenv.Load(path + "/.env"); err != nil {
+			return "", err
 		}
 	}
 
