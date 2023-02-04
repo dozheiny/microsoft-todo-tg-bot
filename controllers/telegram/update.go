@@ -24,7 +24,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 		_, err := io.WriteString(w, fmt.Sprintf("Got error on read body: %s", err.Error()))
 		if err != nil {
-			panic(err)
+			log.Print(err)
 		}
 	}
 
@@ -35,20 +35,20 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 		_, err := io.WriteString(w, fmt.Sprintf("Got error on parse body: %s", err.Error()))
 		if err != nil {
-			panic(err)
+			log.Print(err)
 		}
 	}
 
 	token, err := config.Get("TELEGRAM_TOKEN")
 	if err != nil {
-		panic(err)
+		log.Print(err)
 	}
 
 	text := fmt.Sprintf("Hi %s", inputForm.Message.From.FirstName)
 
 	if err := telegram2.SendMessage(strconv.
 		FormatInt(inputForm.Message.Chat.ID, 10), text, token); err != nil {
-		panic(err)
+		log.Print(err)
 	}
 
 }
