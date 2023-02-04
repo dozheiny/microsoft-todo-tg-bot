@@ -1,4 +1,4 @@
-package telegram
+package handlers
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func (u *Update) NotFound() {
+func (u *Message) NotFound() {
 	text := "command not found!"
 
 	token, err := config.Get("TELEGRAM_TOKEN")
@@ -17,7 +17,7 @@ func (u *Update) NotFound() {
 	}
 
 	if err := telegram2.SendMessage(strconv.
-		FormatInt(u.Message.Chat.ID, 10), text, token); err != nil {
+		FormatInt(u.Chat.ID, 10), text, token); err != nil {
 		log.Print(err)
 	}
 

@@ -3,6 +3,7 @@ package telegram
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/dozheiny/microsoft-todo-tg-bot/handlers"
 	"github.com/dozheiny/microsoft-todo-tg-bot/models/telegram"
 	"github.com/dozheiny/microsoft-todo-tg-bot/pkg/web"
 	"io"
@@ -36,12 +37,17 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	message := new(handlers.Message)
+	message.Chat.ID = inputForm.Message.Chat.ID
+	message.From.ID = inputForm.Message.From.ID
+	message.From.FirstName = inputForm.Message.From.FirstName
+
 	switch inputForm.Message.Text {
 	case "/start":
-		inputForm.Start()
+		message.Start()
 		break
 	default:
-		inputForm.NotFound()
+		message.NotFound()
 	}
 
 }
