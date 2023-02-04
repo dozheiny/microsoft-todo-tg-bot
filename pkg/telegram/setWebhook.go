@@ -12,7 +12,8 @@ func SetWebhook(host, token string) (*telegram.SetWebhook, error) {
 	host = fmt.Sprintf("%s/telegram", host)
 
 	o, err := web.Init().SetHost(url).SetHeader("X-Telegram-Bot-Api-Secret-Token", token).
-		SetParam("url", host).SetOutput(&telegram.SetWebhook{}).Do()
+		SetParam("url", host).SetParam("drop_pending_updates", "true").
+		SetOutput(&telegram.SetWebhook{}).Do()
 	if err != nil {
 		return nil, err
 	}
